@@ -46,7 +46,7 @@ var timerExperiment; //to take a snapshot of the timer when the game ends.
 var starKeeper; // Controls when the stars dissapear from the scoreboard.
 var starNumKeeper = 3; //Keeps a running count of the stars.
 var span = $('.close'); //The 'X' button to close the modal.
-
+var timerStopped = false;
 
 //****************//
 //Helper Functions//
@@ -78,17 +78,13 @@ function scoreboardUpdate() {
 	//Update the scoreboard with the most recent move totals, and periodically remove "stars".
 	moves = moves + 1;
 	scoreboardMoves.text(moves);
-	//At intervals of 16, 20, and 25 moves, a star is removed from the player's scoreboard.
+	//At intervals of 16, and 20 moves, a star is removed from the player's scoreboard.
 	if (moves === 16){
 		starKeeper = $('#star1');
 		starKeeper.remove();
 		starNumKeeper = starNumKeeper -1;
 	} else if (moves === 20){
 		starKeeper = $('#star2');
-		starKeeper.remove();
-		starNumKeeper = starNumKeeper -1;
-	} else if (moves === 25){
-		starKeeper = $('#star3');
 		starKeeper.remove();
 		starNumKeeper = starNumKeeper -1;
 	} else {
@@ -100,8 +96,9 @@ function updateCongratsMessage() {
 	//When the game is over, update the #gratsText element with a customized message
 	var tempMessage1 = $('#gratsText1');
 	var tempMessage2 = $('#gratsText2');
-	tempMessage1.text("Your only took " + moves +" moves and " + timerExperiment + " seconds to complete it!");
-	tempMessage2.text("Your star rating for this round is " + starNumKeeper + '!');
+	timerStopped = true; //stop the timer when the game is over.
+	tempMessage1.text("You only took " + moves +" moves and " + timerExperiment + " seconds to complete it!");
+	tempMessage2.text("Your star rating for this round is: " + starNumKeeper + '!');
 }
 
 function checkGameStatus() {
@@ -162,25 +159,27 @@ function startTheTimer() {
 	};
 }
 
-
 function timerMechanism() {
 	//timerMechanism code as per Udacity Project Reviewers suggested method
 	const game_start_time = new Date().getTime(); // get the current time when user clicked the first card
 	timer = setInterval(function(){
-		let current_time = new Date().getTime();
-		let current_time_played = current_time - game_start_time;
-		let hrs = Math.floor((current_time_played % (1000 * 60 * 60 * 24))/ (1000 * 60 * 60));
-		let mins = Math.floor((current_time_played % (1000 * 60 * 60))/ (1000 * 60));
-		let secs = Math.floor((current_time_played % (1000 * 60))/ 1000);
-		time_value = hrs + ' hours ' + mins + ' mins ' + secs + ' secs ';
-		if (secs <10) {
-			secs = '0' + secs;
-		}
-		current_time_played = hrs + ':' + mins + ':' + secs;
-		$(".time-played").text(current_time_played);
+		if (timerStopped === false){
+			//as long as the game is still running, increment the timer
+			let current_time = new Date().getTime();
+			let current_time_played = current_time - game_start_time;
+			let hrs = Math.floor((current_time_played % (1000 * 60 * 60 * 24))/ (1000 * 60 * 60));
+			let mins = Math.floor((current_time_played % (1000 * 60 * 60))/ (1000 * 60));
+			let secs = Math.floor((current_time_played % (1000 * 60))/ 1000);
+			time_value = hrs + ' hours ' + mins + ' mins ' + secs + ' secs ';
+			if (secs <10) {
+				secs = '0' + secs;
+			}
+			current_time_played = hrs + ':' + mins + ':' + secs;
+			$(".time-played").text(current_time_played);
 		timerExperiment = current_time_played;
-	}, 500);
-};
+		}
+		}, 500);
+}
 
 //****************//
 //Main Game Logic*//
