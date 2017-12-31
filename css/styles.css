@@ -8,6 +8,15 @@ html {
     box-sizing: inherit;
 }
 
+.score-panel {
+    width: 600px;
+}
+
+.score-panel div{
+    width: 30%;
+    float: left;
+}
+
 html,
 body {
     width: 100%;
@@ -85,6 +94,7 @@ h1 {
 
 .score-panel .stars {
     margin: 0;
+    float: left;
     padding: 0;
     display: inline-block;
     margin: 0 5px 0 0;
@@ -93,6 +103,7 @@ h1 {
 .score-panel .stars li {
     list-style: none;
     display: inline-block;
+    float: left;
 }
 
 .score-panel .restart {
@@ -139,3 +150,16 @@ https://www.w3schools.com/howto/howto_css_modals.asp
     text-decoration: none;
     cursor: pointer;
 }
+
+.restart:hover,
+.restart:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.restart {
+    width : 14px;
+    color: #aaa;
+}
+
